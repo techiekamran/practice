@@ -1,4 +1,9 @@
-npm error code ETARGET
-npm error notarget No matching version found for react-native-secure-storage@^1.0.0.
-npm error notarget In most cases you or one of your dependencies are requesting
-npm error notarget a package version that doesn't exist.
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ */
+const config = {};
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
