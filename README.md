@@ -347,3 +347,9 @@ aws ecs run-task --cluster default --task-definition default-matrimonial-api-sta
 aws ecr describe-images --repository-name matrimonial-api --region ap-southeast-2 --query "sort_by(imageDetails,&imagePushedAt)[-5:].{pushed:imagePushedAt,tags:imageTags,digest:imageDigest}" --output table
 
 aws ecs describe-task-definition --task-definition default-matrimonial-api-staging --region ap-southeast-2 --query "taskDefinition.{revision:revision,image:containerDefinitions[0].image}"
+
+
+test data
+aws ecs describe-task-definition --task-definition default-matrimonial-api-staging:79 --region ap-southeast-2 --query "taskDefinition.containerDefinitions[0].{image:image,logGroup:logConfiguration.options.\"awslogs-group\",env:environment[?name=='APP_ENV' || name=='TEST_ACCOUNT_PHONES' || name=='TEST_ACCOUNT_EMAILS']}"
+
+aws ecs run-task --cluster default --task-definition default-matrimonial-api-staging:79 --launch-type FARGATE --network-configuration "awsvpcConfiguration={subnets=[subnet-06373da8875e50616,subnet-0ac319ada5133d9e5,subnet-07c1009413c82b96f],securityGroups=[sg-0ba15b7f40bf4bfe5,sg-0d354284f35f9b823],assignPublicIp=ENABLED}" --overrides '{"containerOverrides":[{"name":"Main","command":["python","-m","scripts.create_test_accounts"]}]}' --region ap-southeast-2
