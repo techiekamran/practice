@@ -341,3 +341,9 @@ Press Ctrl+C.
 
 backfill thumbail 
 aws ecs run-task --cluster default --task-definition default-matrimonial-api-staging:<revision> --launch-type FARGATE --network-configuration "awsvpcConfiguration={subnets=[...],securityGroups=[...],assignPublicIp=ENABLED}" --overrides '{"containerOverrides":[{"name":"Main","command":["python","-m","scripts.backfill_photo_thumbnails","--dry-run"]}]}' --region ap-southeast-2
+
+
+----
+aws ecr describe-images --repository-name matrimonial-api --region ap-southeast-2 --query "sort_by(imageDetails,&imagePushedAt)[-5:].{pushed:imagePushedAt,tags:imageTags,digest:imageDigest}" --output table
+
+aws ecs describe-task-definition --task-definition default-matrimonial-api-staging --region ap-southeast-2 --query "taskDefinition.{revision:revision,image:containerDefinitions[0].image}"
